@@ -9,6 +9,7 @@ import { Observable, throwError } from 'rxjs';
 import { NavigationExtras, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { catchError } from 'rxjs/operators';
+import { error } from 'selenium-webdriver';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -30,8 +31,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
                 throw modalStateErrors.flat();
               }
-              else {
+              else if (typeof(er.error) === 'object') {
                 this.toastr.error(er.statusText, er.status);
+              } else {
+                this.toastr.error(er.error, er.status)
               }
               break;
             case 401:
